@@ -1,0 +1,17 @@
+{
+  "name": "Electron-Test",
+  "version": "0.0.1",
+  "main": "main.js",
+  "productName": "Electron-Test",
+  "license": "The MIT License (MIT)",
+  "dependencies": {
+    "electron-prebuilt": "1.3.5"
+  },
+  "devDependencies": {
+    "electron-prebuilt": "1.3.5"
+  },
+  "build": {
+    "appId": "org.kneelawk.electrontest",
+    "app-category-type": "public.app-category.games"
+  }
+}
