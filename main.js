@@ -1,4 +1,4 @@
-const {app, BrowserWindow} = require("electron");
+const {app, BrowserWindow, ipcMain} = require("electron");
 
 let win
 
@@ -25,4 +25,9 @@ app.on("activate", function () {
   if (win == null) {
     createWindow();
   }
+});
+
+ipcMain.on("login", function (event, arg) {
+  console.log("Logging in...");
+  console.log("Username: " + arg.username + ", password: " + arg.password);
 });
