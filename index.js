@@ -12,7 +12,6 @@ $(() => {
       var password = $("[name=curse-password]").val();
       console.log("Username: " + username);
       ipcRenderer.send("login", {username: username, password: password});
-      loggingIn = false;
     }
   });
 });
@@ -23,6 +22,7 @@ ipcRenderer.on("login-success", (event, arg) => {
   result.addClass("login-success-field");
   console.log("Login success: " + arg.message);
   result.text(arg.message);
+  loggingIn = false;
   result.show();
 });
 
@@ -32,5 +32,6 @@ ipcRenderer.on("login-failure", (event, arg) => {
   result.addClass("login-error-field");
   console.log("Login failure: " + arg.message);
   result.text(arg.message);
+  loggingIn = false;
   result.show();
 });

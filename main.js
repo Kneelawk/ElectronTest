@@ -1,5 +1,6 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
-const http = require("http");
+const https = require("https");
+const url = require("url");
 
 let win
 
@@ -32,32 +33,51 @@ ipcMain.on("login", (event, arg) => {
   console.log("Logging in...");
   console.log("Username: " + arg.username);
 
-  var options = {
-    "host": "curse-rest-proxy.azurewebsites.net",
-    "path": "/authenticate",
-    "method": "POST"
-  };
   var data = {
     "username": arg.username,
     "password": arg.password
   };
-  var req = http.request(options, (response) => {
+  var dataString = JSON.stringify(data);
+
+  var options = {
+    "host": "curse-rest-proxy.azurewebsites.net",
+    "path": "/api/authenticate",
+    "port": 433,
+    "method": "POST",
+    "headers": {
+      "Content-Type": "application/json",
+      "Content-Length": dataString
+    }
+  };
+
+  var handler = (response) => {
+    console.log("Response: " + response.statusCode);
     if (response.statusCode != 200) {
-      var message = "";
-      if (response.statusCode == 401) {
-        message = "401: Bad login";
+      if (Math.floor(response.statusCode / 100) == 3) {
+        let opts = url.parse(response.headers.location);
+        opts.method = "POST";
+        let req = https.request(opts, handler);
+        req.write(dataString);
+        req.end();
+        return;
       } else {
-        message = response.statusCode;
+        var message = "";
+        if (response.statusCode == 401) {
+          message = "401: Bad login";
+        } else {
+          message = response.statusCode;
+        }
+        console.log("Login failure: " + message);
+        event.sender.send("login-failure", { message: "Login failure: " + message});
+        return;
       }
-      console.log("Login failure: " + message);
-      event.sender.send("login-failure", { message: "Login failure: " + message})
     }
 
     var responseData = "";
     response.on("data", (data) => {
       responseData += data;
     });
-    response.on("finish", (something) => {
+    response.on("end", (something) => {
       if (response.statusCode == 200) {
         var responseObj = JSON.parse(responseData);
         var message = "Auth token: Token " + responseObj.user_id + ":" + responseObj.token;
@@ -65,7 +85,9 @@ ipcMain.on("login", (event, arg) => {
         event.sender.send("login-success", { message: "Login success: " + message });
       }
     });
-  });
-  req.write(JSON.stringify(data));
+  };
+
+  var req = https.request(options, handler);
+  req.write(dataString);
   req.end();
 });
