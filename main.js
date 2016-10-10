@@ -1,6 +1,9 @@
 const {app, BrowserWindow, ipcMain} = require("electron");
 const https = require("https");
 const url = require("url");
+const Curse = require("./curse.js").Curse;
+
+let curse = new Curse()
 
 let win
 

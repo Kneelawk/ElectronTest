@@ -11,7 +11,7 @@ exports.Curse = class Curse {
     this.client = new Client();
   }
 
-  login(username, password, callback = () => {}) {
+  login(username, password, callback = (token) => {}) {
     let data = {
       "username": username,
       "password": password
@@ -27,7 +27,12 @@ exports.Curse = class Curse {
     let result = new LoginResult();
 
     this.client.post(loginUrl, args, (data, response) => {
-      // TODO more stuff
+      if (response.statusCode / 100 != 2) {
+        result.emit("error", "Response code: " + response.statusCode);
+        return;
+      }
+      let token = "Token " + data.session.user_id + ":" + data.session.token;
+      callback(token);
     }).on("error", (error) => {
       result.emit("error", error);
     });
