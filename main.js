@@ -37,16 +37,16 @@ ipcMain.on("login", (event, arg) => {
   console.log("Username: " + arg.username);
 
   curse.login(arg.username, arg.password, (token) => {
-    console.log("Login success, token: " + token);
-    event.sender.send("login-success", { message: token });
+    console.log("Login success");
+    event.sender.send("login-success", { message: "Login success" });
   }).on("error", (error) => {
     let message;
-    if (error.statusCode == 401) {
-      message = "401: Bad Login";
+    if (error.status == 401) {
+      message = "Invalid username or password";
     } else if (error.errorType == "statusCode") {
-      message = error.message;
+      message = "Error logging in";
     } else if (error.errorType == "error") {
-      message = "Error: " + error.error;
+      message = "Error logging in";
     }
     console.log("Login failure: " + message);
     event.sender.send("login-failure", { message: message });

@@ -9,36 +9,41 @@
 </head>
 
 <body>
-  <div class="curse-login">
-    <table class="login-form">
-      <tr>
-        <th colspan="2">
-          Curse Login
-        </th>
-      </tr>
-      <tr>
-        <td>
-          Username
-        </td>
-        <td>
-          <input type="text" name="curse-username" class="login-input" value="">
-        </td>
-      </tr>
-      <tr>
-        <td>
-          Password
-        </td>
-        <td>
-          <input type="password" name="curse-password" class="login-input" value="">
-        </td>
-      </tr>
-      <tr>
-        <th colspan="2">
-          <input type="button" name="curse-login" class="login-button" value="Login">
-        </th>
-      </tr>
-    </table>
-    <span id="login-result-field" style="display: none;"></span>
+  <div class="login-pane">
+    <div class="curse-login">
+      <table class="login login-form">
+        <tr>
+          <th colspan="2">
+            Curse Login
+          </th>
+        </tr>
+        <tr>
+          <td class="login-text-cell">
+            Username
+          </td>
+          <td>
+            <input type="text" name="curse-username" class="login-input" value="">
+          </td>
+        </tr>
+        <tr>
+          <td class="login-text-cell">
+            Password
+          </td>
+          <td>
+            <input type="password" name="curse-password" class="login-input" value="">
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2">
+            <input type="button" name="curse-login" class="button" value="Login">
+          </th>
+        </tr>
+      </table>
+      <div id="login-result-field" style="display: none;"></div>
+      <div>
+        <input type="button" name="done-login" class="button" value="Done" style="display: none;">
+      </div>
+    </div>
   </div>
 </body>
 
